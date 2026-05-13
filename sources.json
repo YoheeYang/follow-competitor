@@ -117,17 +117,16 @@
     {
       "id": "moodys_podcast",
       "displayName": "Moody's Podcasts",
-      "baseUrl": "https://www.moodys.com",
+      "baseUrl": "https://moodys.com",
       "sourceGroup": "podcast",
       "sourceAuthority": "official_podcast",
       "feeds": [
         {
-          "id": "moodys_podcasts_page",
+          "id": "moodys_risk_reframed_rss",
           "category": "COMPETITOR_PODCAST",
-          "listUrl": "https://www.moodys.com/web/en/us/insights/podcasts.html",
+          "listUrl": "https://feeds.simplecast.com/KSTM9nB8",
           "windowDays": 14,
-          "parser": "moodys-podcast-page",
-          "includePathPattern": "/insights/podcasts/(risk-reframed|moodys-talks-kyc-decoded)/",
+          "parser": "podcast-rss",
           "maxItems": 3,
           "defaultTags": ["podcast", "kyc", "financial_crime", "risk_management"]
         }

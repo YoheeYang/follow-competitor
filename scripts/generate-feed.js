@@ -155,6 +155,47 @@ function parseMoodysPodcastPage(html, company, feed) {
   return rows.slice(0, Number(feed.maxItems || 5));
 }
 
+function parseRssFeed(xml) {
+  const episodes = [];
+  const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
+  let itemMatch;
+  while ((itemMatch = itemRegex.exec(xml)) !== null) {
+    const block = itemMatch[1];
+    const titleMatch =
+      block.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) || block.match(/<title>([\s\S]*?)<\/title>/);
+    const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : 'Untitled';
+    const guidMatch =
+      block.match(/<guid[^>]*><!\[CDATA\[([\s\S]*?)\]\]><\/guid>/) || block.match(/<guid[^>]*>([\s\S]*?)<\/guid>/);
+    const guid = guidMatch ? guidMatch[1].trim() : null;
+    const pubDateMatch = block.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+    const publishedAt = pubDateMatch ? new Date(pubDateMatch[1].trim()).toISOString() : null;
+    const linkMatch = block.match(/<link>([\s\S]*?)<\/link>/);
+    const link = linkMatch ? linkMatch[1].trim() : null;
+    const enclosureMatch = block.match(/<enclosure\b[^>]*url=["']([^"']+)["'][^>]*>/i);
+    const audioUrl = enclosureMatch ? decodeHtmlEntities(enclosureMatch[1]) : null;
+    const descMatch =
+      block.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/) ||
+      block.match(/<description>([\s\S]*?)<\/description>/);
+    const excerpt = descMatch ? stripHtmlToText(descMatch[1]).slice(0, 2000) : '';
+    if (guid || link) episodes.push({ title, guid, publishedAt, link, audioUrl, excerpt });
+  }
+  return episodes;
+}
+
+async function fetchRssText(url) {
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': UA,
+      Accept: 'application/rss+xml, application/xml, text/xml, */*',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Cache-Control': 'no-cache',
+    },
+    signal: AbortSignal.timeout(45_000),
+  });
+  if (!res.ok) throw new Error(`RSS HTTP ${res.status}`);
+  return res.text();
+}
+
 async function fetchAssemblyAiTranscript(audioUrl, apiKey) {
   const maxAttempts = Number(process.env.ASSEMBLYAI_POLL_ATTEMPTS || 20);
   const pollInterval = Number(process.env.ASSEMBLYAI_POLL_INTERVAL_MS || 15_000);
@@ -281,23 +322,41 @@ async function fetchPodcastContent(sources, assemblyAiKey, state, errors) {
 
   for (const company of sources.companies || []) {
     for (const feed of company.feeds || []) {
-      if (feed.parser !== 'moodys-podcast-page') continue;
+      if (!['moodys-podcast-page', 'podcast-rss'].includes(feed.parser)) continue;
       let rows = [];
       try {
-        const html = await fetchText(feed.listUrl);
-        rows = parseMoodysPodcastPage(html, company, feed);
+        if (feed.parser === 'podcast-rss') {
+          const xml = await fetchRssText(feed.listUrl);
+          rows = parseRssFeed(xml).map((ep) => ({
+            companyId: company.id,
+            name: company.displayName || company.id,
+            title: ep.title,
+            url: ep.link || feed.listUrl,
+            publishedAt: ep.publishedAt,
+            excerpt: ep.excerpt || company.displayName || company.id,
+            audioUrl: ep.audioUrl,
+            defaultTags: feed.defaultTags || [],
+          }));
+        } else {
+          const html = await fetchText(feed.listUrl);
+          rows = parseMoodysPodcastPage(html, company, feed);
+        }
       } catch (e) {
         errors.push(`Podcast: failed to fetch ${company.id}/${feed.id}: ${e.message}`);
         continue;
       }
+      if (feed.maxItems) rows = rows.slice(0, Number(feed.maxItems));
 
       for (const row of rows) {
         if (state.seenPodcasts[row.url]) continue;
         if (row.publishedAt && !withinWindow(row.publishedAt, Number(feed.windowDays || 14))) continue;
         try {
-          const pageHtml = await fetchText(row.url);
-          row.title = extractPageTitle(pageHtml) || row.title;
-          const audioUrl = firstAudioUrl(pageHtml);
+          let audioUrl = row.audioUrl;
+          if (!audioUrl) {
+            const pageHtml = await fetchText(row.url);
+            row.title = extractPageTitle(pageHtml) || row.title;
+            audioUrl = firstAudioUrl(pageHtml);
+          }
           if (!audioUrl) {
             errors.push(`Podcast: no audio URL found for "${row.title}"`);
             continue;
