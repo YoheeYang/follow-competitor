@@ -10,8 +10,8 @@ Before summarizing, apply a strict relevance gate: skip items that are not mater
 
 ## `simple`
 
-- Start each item with `### Verbatim title`.
-- Do not use bullet list item formatting such as `- **Title** —`.
+- Start each item with `**Verbatim title**` on its own line.
+- Do not use bullet list item formatting such as `- **Title** —`, and do not use heading markers such as `### Title` for items.
 - After the title: **one** narrative block, 2–4 sentences.
 - Optional: at most **2** short sub-bullets for standout numbers if the text features them prominently.
 - Do not mention fetching, transcripts, AssemblyAI, central feeds, source fields, or any internal pipeline detail.
@@ -22,7 +22,7 @@ Before summarizing, apply a strict relevance gate: skip items that are not mater
 
 For **`COMPETITOR_OFFICIAL`** article-like items, mirror the intent of follow-builders **`summarize-blogs.md`** while making the business relevance explicit:
 
-1. **Opening line:** `### Verbatim title` (see parent `digest-intro` for heading pattern). Do not prefix with `companyId`, source labels, bullets, or `**`.
+1. **Opening line:** `**Verbatim title**` (see parent `digest-intro` for heading pattern). Do not prefix with `companyId`, source labels, bullets, or `###`.
 2. **Length:** aim for **100–300 words** of digest text when `articleText` supports it; compress if the source is short.
 3. **Lead with the punchline:** product claim, regulatory angle, market stat, customer pain, or fraud thesis — **no** throat-clearing.
 4. **Named specifics:** products, programs, regulators, people — **only** if named in the source fields.
@@ -70,4 +70,4 @@ When **no** `transcript`: metadata + both URLs only; state that full episode tex
 - **PDF with empty `pdfText`:** extraction failed; title + URL; no body claims.
 - **Multiple `companyId` values:** open each major section with a one-line roster if helpful, then items.
 
-Output Markdown under the correct category; use `###` per item in both `simple` and `detailed` mode.
+Output Markdown under the correct reader-facing category heading; use bold title lines per item in both `simple` and `detailed` mode.
