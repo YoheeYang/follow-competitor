@@ -362,12 +362,12 @@ async function fetchPodcastContent(sources, assemblyAiKey, state, errors) {
             continue;
           }
           const transcript = await fetchAssemblyAiTranscript(audioUrl, assemblyAiKey);
-          state.seenPodcasts[row.url] = Date.now();
           if (transcript.error) {
             errors.push(`Podcast: AssemblyAI error for "${row.title}": ${transcript.error}`);
             continue;
           }
           if (!transcript.transcript) continue;
+          state.seenPodcasts[row.url] = Date.now();
           results.push({
             source: 'podcast',
             companyId: row.companyId,
