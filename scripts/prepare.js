@@ -687,7 +687,7 @@ async function fetchAssemblyAiTranscript(audioUrl, apiKey) {
       Authorization: apiKey,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ audio_url: audioUrl }),
+    body: JSON.stringify({ audio_url: audioUrl, speech_models: ['universal-2'] }),
   });
   if (!submit.ok) {
     const text = await submit.text().catch(() => '');
