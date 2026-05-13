@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "follow-competitor user config",
+  "type": "object",
+  "properties": {
+    "platform": {
+      "type": "string",
+      "enum": ["openclaw", "other"],
+      "description": "openclaw vs Cursor/Codex/etc."
+    },
+    "language": {
+      "type": "string",
+      "enum": ["en", "zh"],
+      "default": "en"
+    },
+    "digestDepth": {
+      "type": "string",
+      "enum": ["simple", "detailed"],
+      "default": "detailed",
+      "description": "Controls how much body/transcript material the Markdown digest should synthesize: simple = short bullets; detailed = richer themes, figures, actors, and implications from articleText/transcript"
+    },
+    "timezone": { "type": "string", "default": "Asia/Shanghai" },
+    "frequency": {
+      "type": "string",
+      "enum": ["daily", "weekly"],
+      "default": "daily"
+    },
+    "deliveryTime": { "type": "string", "default": "09:00" },
+    "weeklyDay": {
+      "type": "string",
+      "enum": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    },
+    "delivery": {
+      "type": "object",
+      "description": "Feishu: use feishu_webhook (incoming webhook URL) or feishu_app (app + receive_id). Legacy value feishu = feishu_webhook.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["stdout", "feishu", "feishu_webhook", "feishu_app"],
+          "default": "stdout"
+        },
+        "feishuApiBase": {
+          "type": "string",
+          "description": "Feishu/Lark Open API host. China: https://open.feishu.cn — International: https://open.larksuite.com",
+          "default": "https://open.feishu.cn"
+        },
+        "feishuWebhookUrl": {
+          "type": "string",
+          "description": "Custom bot webhook (https://.../bot/v2/hook/...). Overrides FEISHU_WEBHOOK_URL from .env if set."
+        },
+        "feishuReceiveId": {
+          "type": "string",
+          "description": "For feishu_app: chat_id (oc_...) or user open_id (ou_...) etc., matching feishuReceiveIdType"
+        },
+        "feishuChatId": {
+          "type": "string",
+          "description": "Deprecated alias for feishuReceiveId when receive_id_type is chat_id"
+        },
+        "feishuReceiveIdType": {
+          "type": "string",
+          "enum": ["chat_id", "open_id", "user_id", "union_id", "email"],
+          "default": "chat_id"
+        },
+        "feishuAppId": {
+          "type": "string",
+          "description": "Optional; prefer FEISHU_APP_ID in .env for secrets hygiene"
+        },
+        "feishuAppSecret": {
+          "type": "string",
+          "description": "Optional; strongly prefer FEISHU_APP_SECRET in .env"
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxDetailFetchesPerRun": {
+          "type": "integer",
+          "default": 35,
+          "description": "Caps HTTP fetches: article pages (COMPETITOR_OFFICIAL / REGULATORY_TRACKING), podcast pages, PDFs"
+        },
+        "maxYoutubeTranscriptsPerRun": { "type": "integer", "default": 8 },
+        "maxPod2txtEpisodesPerRun": {
+          "type": "integer",
+          "default": 5,
+          "description": "Max podcast episodes to pull transcripts via pod2txt (same service as follow-builders generate-feed)"
+        },
+        "maxArticleTextChars": {
+          "type": "integer",
+          "default": 120000,
+          "description": "Max stripped characters of articleText per item"
+        }
+      }
+    },
+    "onboardingComplete": { "type": "boolean", "default": false }
+  }
+}

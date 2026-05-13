@@ -1,0 +1,18 @@
+{
+  "platform": "other",
+  "language": "zh",
+  "digestDepth": "detailed",
+  "timezone": "Asia/Shanghai",
+  "frequency": "daily",
+  "deliveryTime": "09:00",
+  "delivery": {
+    "method": "feishu_webhook",
+    "feishuApiBase": "https://open.feishu.cn",
+    "feishuWebhookUrl": "https://open.feishu.cn/open-apis/bot/v2/hook/REPLACE_ME"
+  },
+  "limits": {
+    "maxDetailFetchesPerRun": 20,
+    "maxYoutubeTranscriptsPerRun": 5
+  },
+  "onboardingComplete": true
+}

@@ -1,0 +1,15 @@
+{
+  "platform": "other",
+  "language": "zh",
+  "digestDepth": "detailed",
+  "timezone": "Asia/Shanghai",
+  "frequency": "daily",
+  "deliveryTime": "09:00",
+  "delivery": {
+    "method": "feishu_app",
+    "feishuApiBase": "https://open.feishu.cn",
+    "feishuReceiveIdType": "chat_id",
+    "feishuReceiveId": "oc_REPLACE_WITH_GROUP_CHAT_ID"
+  },
+  "onboardingComplete": true
+}

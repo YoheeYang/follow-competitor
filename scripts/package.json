@@ -1,0 +1,15 @@
+{
+  "name": "follow-competitor-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "digest": "node prepare.js",
+    "generate-feed": "node generate-feed.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pdf-parse": "^1.1.1",
+    "youtube-transcript": "^1.2.1"
+  }
+}

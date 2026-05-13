@@ -1,0 +1,137 @@
+{
+  "version": 4,
+  "centralFeeds": {
+    "regulatoryX": "https://raw.githubusercontent.com/YoheeYang/follow-competitor/main/feed-x.json",
+    "podcasts": "https://raw.githubusercontent.com/YoheeYang/follow-competitor/main/feed-podcasts.json"
+  },
+  "x_accounts": [
+    {
+      "companyId": "fatf",
+      "displayName": "FATF",
+      "handle": "FATFNews",
+      "windowDays": 3,
+      "maxTweets": 5,
+      "defaultTags": ["fatf", "aml_cft", "regulatory_alert"]
+    },
+    {
+      "companyId": "fincen",
+      "displayName": "FinCEN",
+      "handle": "FinCENnews",
+      "windowDays": 3,
+      "maxTweets": 5,
+      "defaultTags": ["fincen", "aml", "regulatory_alert"]
+    }
+  ],
+  "companies": [
+    {
+      "id": "sumsub",
+      "displayName": "Sumsub",
+      "baseUrl": "https://sumsub.com",
+      "sourceGroup": "competitor",
+      "sourceAuthority": "official_company",
+      "feeds": [
+        {
+          "id": "sumsub_news",
+          "category": "COMPETITOR_OFFICIAL",
+          "listUrl": "https://sumsub.com/media/news/",
+          "windowDays": 3,
+          "parser": "sumsub-next-news",
+          "defaultTags": ["regulatory_news", "fraud_trend", "market_update"]
+        },
+        {
+          "id": "sumsub_media",
+          "category": "COMPETITOR_OFFICIAL",
+          "listUrl": "https://sumsub.com/media/",
+          "windowDays": 3,
+          "parser": "sumsub-next-media",
+          "defaultTags": ["competitor_positioning", "kyc_aml", "industry_guide"]
+        },
+        {
+          "id": "sumsub_podcast",
+          "category": "COMPETITOR_PODCAST",
+          "listUrl": "https://sumsub.com/blog/podcast/",
+          "windowDays": 14,
+          "parser": "sumsub-next-podcast",
+          "defaultTags": ["longform", "podcast", "financial_crime"]
+        }
+      ]
+    },
+    {
+      "id": "trulioo",
+      "displayName": "Trulioo",
+      "baseUrl": "https://www.trulioo.com",
+      "sourceGroup": "competitor",
+      "sourceAuthority": "official_company",
+      "feeds": [
+        {
+          "id": "trulioo_blog",
+          "category": "COMPETITOR_OFFICIAL",
+          "listUrl": "https://www.trulioo.com/blog",
+          "windowDays": 7,
+          "parser": "generic-blog-list",
+          "includePathPattern": "^/blog/",
+          "excludePathPattern": "^/(post-topics|resources)",
+          "maxItems": 6,
+          "defaultTags": ["identity_verification", "kyc", "fraud_prevention"]
+        }
+      ]
+    },
+    {
+      "id": "jumio",
+      "displayName": "Jumio",
+      "baseUrl": "https://www.jumio.com",
+      "sourceGroup": "competitor",
+      "sourceAuthority": "official_company",
+      "feeds": [
+        {
+          "id": "jumio_blog",
+          "category": "COMPETITOR_OFFICIAL",
+          "listUrl": "https://www.jumio.com/feed/",
+          "windowDays": 7,
+          "parser": "rss-list",
+          "maxItems": 6,
+          "defaultTags": ["identity_verification", "digital_identity", "fraud_prevention"]
+        }
+      ]
+    },
+    {
+      "id": "veriff",
+      "displayName": "Veriff",
+      "baseUrl": "https://www.veriff.com",
+      "sourceGroup": "competitor",
+      "sourceAuthority": "official_company",
+      "feeds": [
+        {
+          "id": "veriff_blog",
+          "category": "COMPETITOR_OFFICIAL",
+          "listUrl": "https://www.veriff.com/blog/page/1",
+          "windowDays": 7,
+          "parser": "generic-blog-list",
+          "includePathPattern": "^/blog/[^/?#]+/?$",
+          "excludeTitlePattern": "world health day|veriffians|mental|well-?being|meet .*|appoints|appointment",
+          "maxItems": 6,
+          "defaultTags": ["identity_verification", "fraud_prevention", "compliance"]
+        }
+      ]
+    },
+    {
+      "id": "moodys_podcast",
+      "displayName": "Moody's Podcasts",
+      "baseUrl": "https://www.moodys.com",
+      "sourceGroup": "podcast",
+      "sourceAuthority": "official_podcast",
+      "feeds": [
+        {
+          "id": "moodys_podcasts_page",
+          "category": "COMPETITOR_PODCAST",
+          "listUrl": "https://www.moodys.com/web/en/us/insights/podcasts.html",
+          "windowDays": 14,
+          "parser": "moodys-podcast-page",
+          "includePathPattern": "/insights/podcasts/(risk-reframed|moodys-talks-kyc-decoded)/",
+          "maxItems": 3,
+          "defaultTags": ["podcast", "kyc", "financial_crime", "risk_management"]
+        }
+      ]
+    }
+  ]
+}
