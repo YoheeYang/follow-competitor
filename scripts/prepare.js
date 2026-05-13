@@ -193,6 +193,16 @@ function normalizeDate(isoLike) {
   return s;
 }
 
+function parseLooseDate(text) {
+  if (!text) return null;
+  const match = String(text).match(
+    /\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+(\d{1,2}),\s+(20\d{2})\b/i,
+  );
+  if (!match) return null;
+  const parsed = new Date(`${match[1]} ${match[2]}, ${match[3]} 00:00:00 UTC`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+}
+
 function withinWindow(iso, windowDays) {
   const d = new Date(normalizeDate(iso) || iso);
   if (Number.isNaN(d.getTime())) return false;
@@ -419,11 +429,13 @@ function parseGenericBlogListing(html, company, feed) {
     if (!includeRe && !/(\/blog\/|\/resources\/|\/resource\/|\/news\/|\/latest-news\/)/i.test(path)) continue;
     if (excludeRe && excludeRe.test(path)) continue;
     if (/(\/page\/\d+\/?$|\/tag\/|\/tags\/|\/category\/|\/author\/|\/topic=|\/search|\/resources\/?$|\/blog\/?$)/i.test(url)) continue;
+    const rawAnchorText = stripHtmlToText(match[2]);
+    const publishedAt = parseLooseDate(rawAnchorText);
     const title = cleanAnchorTitle(match[2]);
     if (!title || title.length < 8) continue;
     if (includeTitleRe && !includeTitleRe.test(title)) continue;
     if (excludeTitleRe && excludeTitleRe.test(title)) continue;
-    add({ url, title });
+    add({ url, title, publishedAt });
   }
 
   return rows.slice(0, Number(feed.maxItems || 8));
@@ -458,6 +470,29 @@ function extractPageTitle(html) {
     .trim();
 }
 
+function extractPagePublishedAt(html) {
+  for (const block of jsonLdBlocks(html)) {
+    let found = null;
+    walkJson(block, (node) => {
+      if (found) return;
+      const type = Array.isArray(node['@type']) ? node['@type'].join(' ') : node['@type'];
+      if (!/(Article|BlogPosting|NewsArticle|Report|PodcastEpisode)/i.test(String(type || ''))) return;
+      found = node.datePublished || node.dateModified || node.uploadDate || null;
+    });
+    if (found) return normalizeDate(found);
+  }
+
+  const metaMatch =
+    html.match(/<meta\b[^>]*(?:property|name)=["'](?:article:published_time|date|publishdate|pubdate|datePublished)["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
+    html.match(/<meta\b[^>]*content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:article:published_time|date|publishdate|pubdate|datePublished)["'][^>]*>/i);
+  if (metaMatch?.[1]) return normalizeDate(metaMatch[1]);
+
+  const timeMatch = html.match(/<time\b[^>]*datetime=["']([^"']+)["'][^>]*>/i);
+  if (timeMatch?.[1]) return normalizeDate(timeMatch[1]);
+
+  return parseLooseDate(stripHtmlToText(html).slice(0, 2000));
+}
+
 function extractSumsubArticleText(html) {
   const data = parseNextData(html);
   const content = data?.props?.pageProps?.post?.content;
@@ -483,6 +518,13 @@ function isRelevantOfficialItem(item) {
 
   if (IRRELEVANT_OFFICIAL_RE.test(haystack)) return false;
   return KYC_RELEVANCE_RE.test(haystack);
+}
+
+function isWithinConfiguredWindow(item) {
+  if (!ARTICLE_LIKE_CATEGORIES.has(item.category)) return true;
+  const windowDays = Number(item.feedWindowDays || 7);
+  if (item.publishedAt) return withinWindow(item.publishedAt, windowDays);
+  return item.acceptUndated !== false;
 }
 
 const YT_PATTERNS = [
@@ -1021,7 +1063,6 @@ async function main() {
       for (const row of rows) {
         if (!row.uri) continue;
         if (row.publishedAt && !withinWindow(row.publishedAt, windowDays)) continue;
-        if (!row.publishedAt && feed.acceptUndated === false) continue;
         const url =
           feed.parser?.startsWith('sumsub-')
             ? sumsubCanonicalArticleUrl(baseUrl, row.uri, row.category)
@@ -1038,6 +1079,8 @@ async function main() {
           title: row.title,
           url,
           publishedAt: row.publishedAt,
+          feedWindowDays: windowDays,
+          acceptUndated: feed.acceptUndated !== false,
           excerpt: row.excerpt || '',
           assetType: url.split('?')[0].toLowerCase().endsWith('.pdf') ? 'pdf' : 'web',
           ...(row.tweetText ? { tweetText: row.tweetText } : {}),
@@ -1069,6 +1112,10 @@ async function main() {
     try {
       const pageHtml = await fetchText(it.url);
       const articleText = extractArticleText(pageHtml);
+      if (!it.publishedAt) {
+        const pagePublishedAt = extractPagePublishedAt(pageHtml);
+        if (pagePublishedAt) it.publishedAt = pagePublishedAt;
+      }
       if (articleText) {
         it.articleText = articleText.slice(0, limits.maxArticleTextChars);
         const pageTitle = extractPageTitle(pageHtml);
@@ -1083,6 +1130,10 @@ async function main() {
       it.articleError = e.message;
     }
   }
+
+  const beforeWindowFilter = fresh.length;
+  fresh = fresh.filter(isWithinConfiguredWindow);
+  const filteredOutOfWindow = beforeWindowFilter - fresh.length;
 
   const beforeRelevanceFilter = fresh.length;
   fresh = fresh.filter(isRelevantOfficialItem);
@@ -1265,6 +1316,7 @@ async function main() {
       listingRows: raw.length,
       afterDedupe: windowed.length,
       newItems: fresh.length,
+      filteredOutOfWindow,
       filteredIrrelevant,
     },
     errors: errors.length > 0 ? errors : undefined,

@@ -35,6 +35,7 @@
           "category": "COMPETITOR_OFFICIAL",
           "listUrl": "https://sumsub.com/media/news/",
           "windowDays": 3,
+          "acceptUndated": false,
           "parser": "sumsub-next-news",
           "defaultTags": ["regulatory_news", "fraud_trend", "market_update"]
         },
@@ -43,6 +44,7 @@
           "category": "COMPETITOR_OFFICIAL",
           "listUrl": "https://sumsub.com/media/",
           "windowDays": 3,
+          "acceptUndated": false,
           "parser": "sumsub-next-media",
           "defaultTags": ["competitor_positioning", "kyc_aml", "industry_guide"]
         },
@@ -68,6 +70,7 @@
           "category": "COMPETITOR_OFFICIAL",
           "listUrl": "https://www.trulioo.com/blog",
           "windowDays": 7,
+          "acceptUndated": false,
           "parser": "generic-blog-list",
           "includePathPattern": "^/blog/",
           "excludePathPattern": "^/(post-topics|resources)",
@@ -88,6 +91,7 @@
           "category": "COMPETITOR_OFFICIAL",
           "listUrl": "https://www.jumio.com/feed/",
           "windowDays": 7,
+          "acceptUndated": false,
           "parser": "rss-list",
           "maxItems": 6,
           "defaultTags": ["identity_verification", "digital_identity", "fraud_prevention"]
@@ -106,6 +110,7 @@
           "category": "COMPETITOR_OFFICIAL",
           "listUrl": "https://www.veriff.com/blog/page/1",
           "windowDays": 7,
+          "acceptUndated": false,
           "parser": "generic-blog-list",
           "includePathPattern": "^/blog/[^/?#]+/?$",
           "excludeTitlePattern": "world health day|veriffians|mental|well-?being|meet .*|appoints|appointment",

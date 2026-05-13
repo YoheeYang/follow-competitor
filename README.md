@@ -88,7 +88,7 @@
 
 ## 正文抓取、链接与 YouTube 字幕
 
-- **COMPETITOR_OFFICIAL：**`prepare.js` 会进入**可打开的 canonical 链接**，抽取正文得到 **`articleText`**，供模型做全文级摘要（不再只用列表摘要）。Sumsub 仍使用 `__NEXT_DATA__`；Trulioo / Jumio / Veriff 走通用 blog/RSS parser，窗口为 7 天。Persona 因自动抓取返回 403，暂不纳入。抓取层会过滤与 KYC / AML / KYB / IDV / fraud / compliance / regulatory 无关的官源内容，例如雇主品牌、员工健康、纯公司文化内容。
+- **COMPETITOR_OFFICIAL：**`prepare.js` 会进入**可打开的 canonical 链接**，抽取正文得到 **`articleText`**，供模型做全文级摘要（不再只用列表摘要）。Sumsub 仍使用 `__NEXT_DATA__`；Trulioo / Jumio / Veriff 走通用 blog/RSS parser，窗口为 7 天。Persona 因自动抓取返回 403，暂不纳入。官源条目最终按真实 `publishedAt` 做窗口过滤；若列表无日期，会在详情页补抓 JSON-LD/meta/time 日期，仍无日期且 `acceptUndated=false` 时不会输出。抓取层也会过滤与 KYC / AML / KYB / IDV / fraud / compliance / regulatory 无关的内容，例如雇主品牌、员工健康、纯公司文化内容。
 - **链接 404：**Sumsub 列表里的 `uri` 常见为 `/news/...`、`/spotlight/...` 或根路径 `/某slug/`，直接拼在 `sumsub.com` 根下会 404；脚本已按路径类型改写为 **`/media/news/...`、`/media/spotlight/...`、`/blog/...`** 等形式，摘要里请使用 JSON 中的 **`url`** 字段（已是修正后地址）。
 - **REGULATORY_TRACKING：**FATF / FinCEN 按 `follow-builders` 模式走中央 feed：`scripts/generate-feed.js` 在可信环境用 **`X_BEARER_TOKEN`** 生成 `feed-x.json`，日常 `prepare.js` 只读取公开/本地 feed。JSON 中会包含 `tweetText`、`xHandle`、`xMetrics`，摘要只总结 tweet 内容，不额外生成销售话术。
 - **YouTube / 播客文稿（对齐 follow-builders）：**`follow-builders` 的 `prepare-digest.js` 只消费中央 feed 里**已生成**的 `transcript`。`follow-competitor` 也采用中央化：GitHub Actions 运行 `scripts/generate-feed.js`，用 GitHub Secret **`ASSEMBLYAI_API_KEY`** 抓 Moody’s podcast 页，进入 episode 页提取 `.mp3/.m4a` 音频 URL，调用 AssemblyAI `/v2/transcript`，再写入 `feed-podcasts.json`。日常 `prepare.js` 优先读取中央 `feed-podcasts.json`；本地转写只作为 fallback。
