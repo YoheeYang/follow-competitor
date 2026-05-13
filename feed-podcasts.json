@@ -1,11 +1,10 @@
 {
-  "generatedAt": "2026-05-13T08:56:53.502Z",
+  "generatedAt": "2026-05-13T09:02:14.186Z",
   "podcasts": [],
   "stats": {
     "podcastEpisodes": 0
   },
   "errors": [
-    "X API: User lookup failed: X API HTTP 402: {\"account_id\":2054453070231187456,\"title\":\"CreditsDepleted\",\"detail\":\"Your enrolled account [2054453070231187456] does not have any credits to fulfill this request.\",\"type\":\"https://api.twitter.com/2/problems/credits\"}",
-    "Podcast: AssemblyAI error for \"Trade Credit 101 | Back to basics\": submit HTTP 400: {\"error\": \"\\\"speech_models\\\" must be a non-empty list containing one or more of: \\\"universal-3-pro\\\", \\\"universal-2\\\"\"}"
+    "X API: User lookup failed: X API HTTP 402: {\"account_id\":2054453070231187456,\"title\":\"CreditsDepleted\",\"detail\":\"Your enrolled account [2054453070231187456] does not have any credits to fulfill this request.\",\"type\":\"https://api.twitter.com/2/problems/credits\"}"
   ]
 }
