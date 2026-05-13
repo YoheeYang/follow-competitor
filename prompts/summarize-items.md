@@ -10,8 +10,11 @@ Before summarizing, apply a strict relevance gate: skip items that are not mater
 
 ## `simple`
 
-- After **title** (verbatim): **one** narrative block, 2–4 sentences.
+- Start each item with `### Verbatim title`.
+- Do not use bullet list item formatting such as `- **Title** —`.
+- After the title: **one** narrative block, 2–4 sentences.
 - Optional: at most **2** short sub-bullets for standout numbers if the text features them prominently.
+- Do not mention fetching, transcripts, AssemblyAI, central feeds, source fields, or any internal pipeline detail.
 
 ---
 
@@ -19,7 +22,7 @@ Before summarizing, apply a strict relevance gate: skip items that are not mater
 
 For **`COMPETITOR_OFFICIAL`** article-like items, mirror the intent of follow-builders **`summarize-blogs.md`** while making the business relevance explicit:
 
-1. **Opening line:** `companyId` / publisher context + **verbatim title** (see parent `digest-intro` for heading pattern).
+1. **Opening line:** `### Verbatim title` (see parent `digest-intro` for heading pattern). Do not prefix with `companyId`, source labels, bullets, or `**`.
 2. **Length:** aim for **100–300 words** of digest text when `articleText` supports it; compress if the source is short.
 3. **Lead with the punchline:** product claim, regulatory angle, market stat, customer pain, or fraud thesis — **no** throat-clearing.
 4. **Named specifics:** products, programs, regulators, people — **only** if named in the source fields.
@@ -56,6 +59,7 @@ When `transcript` is present, align with follow-builders **`summarize-podcast.md
 - Write **standalone** lessons — avoid “this episode / the host asks / in the video.”
 - Translate jargon only when needed for a general business reader.
 - **Links:** include **`youtubeWatchUrl`** (specific video) when present; also episode **`url`** if both exist.
+- Do not mention whether the transcript came from AssemblyAI, YouTube captions, pod2txt, or any other internal source.
 
 When **no** `transcript`: metadata + both URLs only; state that full episode text was unavailable.
 
@@ -66,4 +70,4 @@ When **no** `transcript`: metadata + both URLs only; state that full episode tex
 - **PDF with empty `pdfText`:** extraction failed; title + URL; no body claims.
 - **Multiple `companyId` values:** open each major section with a one-line roster if helpful, then items.
 
-Output Markdown under the correct category; use `###` per item in `detailed` mode when it improves mobile reading.
+Output Markdown under the correct category; use `###` per item in both `simple` and `detailed` mode.

@@ -14,7 +14,8 @@ For **`detailed`**, treat article-like `COMPETITOR_OFFICIAL` and `REGULATORY_TRA
 
 ## Depth: `simple`
 
-- One primary bullet per item after the **verbatim title** (bold).
+- Use a clean follow-builders-like item shape: `### Verbatim title` on its own line, then one narrative paragraph.
+- Do **not** use list bullets for items. Avoid `- **Title** — ...`.
 - **2–4 short sentences** total per item, prioritizing the main claim + one supporting fact from `articleText` / `transcript` / `pdfText` (else `excerpt`).
 - No sub-bullets unless essential for clarity.
 
@@ -26,7 +27,7 @@ For **`detailed`**, treat article-like `COMPETITOR_OFFICIAL` and `REGULATORY_TRA
 
 **Shape (competitor-positioning remix, not a thin outline):**
 
-1. **Line 1 — source line:** e.g. `**Sumsub — Competitor Official:**` then the **verbatim article title** (bold `###` heading is fine).
+1. **Line 1 — title line:** use `### Verbatim article title`. Do not prefix with `-`, do not wrap the title in `**`, and do not add a source label before the title.
 2. **Main write-up — 100–300 words** in the digest language, scaled to how much **substance** the source actually provides (shorter if `articleText` is thin; do not pad).
 3. **Lead:** first sentences must state **what matters most** — product claim, market finding, customer pain, regulatory story, or fraud pattern — **no** filler openers (“In this article…”, “The piece discusses…”, “This blog post…”). Jump straight into the substance.
 4. **Body:** weave in **named** entities (regulators, companies, people **only if named in source**), **what changed**, and **quantified** facts (**%**, **currency**, **dates**, **jurisdictions**) drawn strictly from `articleText` / `pdfText`.
@@ -51,6 +52,7 @@ For **`detailed`**, treat article-like `COMPETITOR_OFFICIAL` and `REGULATORY_TRA
 
 - **No fabrication:** quotes, stats, and regulatory claims must appear in `articleText` / `transcript` / `pdfText` / `excerpt`.
 - **Relevance gate:** omit items that are not materially related to KYC / AML / KYB / IDV / fraud / compliance / regulatory policy, even if they were fetched. Do not include employer branding, employee wellness, pure company culture, generic hiring, or unrelated corporate news.
+- **No pipeline commentary:** never mention how the item was fetched, transcript source, central feeds, `AssemblyAI`, `youtube-transcript`, `feed-podcasts.json`, `prepare.js`, or internal JSON fields. The digest should read like content intelligence, not a system log.
 - **Language:** `config.language` `zh` vs `en`.
 - **Sections:** use `## COMPETITOR_OFFICIAL`, `## REGULATORY_TRACKING`, `## COMPETITOR_PODCAST` in that order; skip empty sections.
 
