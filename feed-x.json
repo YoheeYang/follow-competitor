@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-05-27T10:12:35.387Z",
+  "generatedAt": "2026-05-28T10:21:28.797Z",
   "x": [],
   "stats": {
     "xAccounts": 0,
     "totalTweets": 0
   },
   "errors": [
-    "X API: User lookup failed: X API HTTP 402: {\"account_id\":2054453070231187456,\"title\":\"CreditsDepleted\",\"detail\":\"Your enrolled account [2054453070231187456] does not have any credits to fulfill this request.\",\"type\":\"https://api.twitter.com/2/problems/credits\"}"
+    "X API: User lookup failed: X API HTTP 500: {\"title\":\"Internal Server Error\",\"detail\":\"Something is broken. This is usually a temporary error, for example in a high load situation or if an endpoint is temporarily having issues. Check in the developer forums in case others are having similar issues, or try again later. \",\"type\":\"about:blank\",\""
   ]
 }
