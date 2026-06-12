@@ -1,5 +1,7 @@
 {
   "seenTweets": {},
-  "seenPodcasts": {},
-  "lastGeneratedAt": "2026-06-11T10:52:44.424Z"
+  "seenPodcasts": {
+    "https://moodys-talks-kyc-decoded.simplecast.com/episodes/growth-strategy-101-back-to-basics-C37Cr1T8": 1781260039339
+  },
+  "lastGeneratedAt": "2026-06-12T10:27:19.339Z"
 }
