@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-23T09:58:46.522Z",
+  "generatedAt": "2026-06-24T09:46:30.499Z",
   "x": [],
   "stats": {
     "xAccounts": 0,
     "totalTweets": 0
   },
   "errors": [
-    "X API: User lookup failed: X API HTTP 402: {\"account_id\":2054453070231187456,\"title\":\"CreditsDepleted\",\"detail\":\"Your enrolled account [2054453070231187456] does not have any credits to fulfill this request.\",\"type\":\"https://api.twitter.com/2/problems/credits\"}"
+    "X API: User lookup failed: X API HTTP 402: {\"detail\":\"credits depleted\",\"status\":402,\"title\":\"Payment Required\",\"type\":\"https://api.x.com/2/problems/credits-depleted\"}"
   ]
 }
