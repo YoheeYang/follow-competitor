@@ -1,5 +1,7 @@
 {
   "seenTweets": {},
-  "seenPodcasts": {},
-  "lastGeneratedAt": "2026-11-10T14:44:08.137Z"
+  "seenPodcasts": {
+    "https://moodys-talks-kyc-decoded.simplecast.com/episodes/lessons-from-an-ai-engineer-ooAqjJTE": 1794405607556
+  },
+  "lastGeneratedAt": "2026-11-11T14:00:07.556Z"
 }
